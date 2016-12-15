@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Angular Demo App</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="highchart/dark.theme.js"></script>
+
+    <script src="app.js"></script>
+    <script src="data.service.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl as vm">
+    
+    <div id="container" ng-show="vm.showChart" style="width:100%; height:400px;"></div>
+    
+    <div id="searchContainer" class="center">
+        <input type="text"
+               class="form-control"
+               ng-model="vm.searchText"
+               aria-describedby="searchHelp"
+               placeholder='Search by id' />
+    </div>
+    
+    <div class="container">
+      <div class="row center bold gridHeader">
+        <div class="col-xs-3 underline click" ng-click="orderByField='name'; vm.sortReverse = !vm.sortReverse">Id</div>
+        <div class="col-xs-3 underline click" ng-click="orderByField='data[0][1]'; vm.sortReverse = !vm.sortReverse">Oldest</div>
+        <div class="col-xs-3 underline click" ng-click="orderByField='data[data.length-1][1]'; vm.sortReverse = !vm.sortReverse">Newest</div>
+        <div class="col-xs-3 underline click" ng-click="orderByField='data.length'; vm.sortReverse = !vm.sortReverse">Total</div>
+      </div>
+      <div class="row center gridColor" ng-click="vm.makeChart(item)" ng-repeat="item in vm.rows | orderBy:orderByField:vm.sortReverse | filter:{name: vm.searchText}">
+        <div class="col-xs-3">{{item.name}}</div>
+        <div class="col-xs-3">{{item.data[0][1]}}</div>
+        <div class="col-xs-3">{{item.data[item.data.length-1][1]}}</div>
+        <div class="col-xs-3">{{item.data.length}}</div>
+      </div>
+    </div>
+  </body>
+
+</html>
